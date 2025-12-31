@@ -30,29 +30,6 @@ permalink: /top-times/
   </div>
 </div>
 
-<div style="margin-top: 2.5rem; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc;">
-  <h2 style="margin-top: 0;">Average Top-32 Time by Event/Gender/Division and Rank</h2>
-  <p class="meta" style="margin-top: 0;">Averages are calculated from the available top-32 rows for each rank.</p>
-
-  <div class="event-selector" style="margin: 0.5rem 0 1rem;">
-    <label for="averageSelect" style="font-weight: 600; margin-right: 0.5rem;">Event:</label>
-    <select id="averageSelect" style="padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid #cbd5e1; min-width: 280px;"></select>
-  </div>
-
-  <div style="overflow-x: auto;">
-    <table>
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Average Time</th>
-          <th>Samples</th>
-        </tr>
-      </thead>
-      <tbody id="averageBody"></tbody>
-    </table>
-  </div>
-</div>
-
 <script>
   const columns = [
     { key: 'rk', label: 'Rank' },
@@ -102,8 +79,6 @@ permalink: /top-times/
 
           "{{ name | escape }}": {
             label: "{{ event_title | escape }} ({{ gender | capitalize | escape }} {{ division_label | escape }})",
-            eventName: "{{ event_title | escape }}",
-            eventSlug: "{{ event_slug | escape }}",
             season: "{{ season | escape }}",
             phase: "{{ phase | escape }}",
             division: "{{ division_label | escape }}",
@@ -122,36 +97,6 @@ permalink: /top-times/
   const tableBody = document.getElementById('tableBody');
   const eventTitle = document.getElementById('eventTitle');
   const eventDetails = document.getElementById('eventDetails');
-  const averageSelect = document.getElementById('averageSelect');
-  const averageBody = document.getElementById('averageBody');
-
-  function parseTimeToSeconds(timeString) {
-    if (!timeString) return NaN;
-
-    const parts = timeString.split(':');
-    if (parts.length === 1) {
-      return parseFloat(parts[0]);
-    }
-
-    if (parts.length === 2) {
-      const minutes = parseFloat(parts[0]);
-      const seconds = parseFloat(parts[1]);
-      if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) return NaN;
-      return minutes * 60 + seconds;
-    }
-
-    return NaN;
-  }
-
-  function formatSecondsToTime(seconds) {
-    if (!Number.isFinite(seconds)) return '';
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds - minutes * 60;
-    if (minutes > 0) {
-      return `${minutes}:${remainingSeconds.toFixed(2).padStart(5, '0')}`;
-    }
-    return remainingSeconds.toFixed(2);
-  }
 
   function renderHeaders() {
     tableHeaders.innerHTML = '';
@@ -203,91 +148,14 @@ permalink: /top-times/
     });
   }
 
-  const groupedAverages = {};
-
-  function buildGroupedAverages() {
-    Object.values(eventData).forEach((event) => {
-      const groupKey = `${event.eventSlug}|${event.gender}|${event.division}`;
-
-      if (!groupedAverages[groupKey]) {
-        groupedAverages[groupKey] = {
-          label: `${event.eventName} (${event.gender.charAt(0).toUpperCase() + event.gender.slice(1)} ${event.division})`,
-          totals: Array(33).fill(0),
-          counts: Array(33).fill(0),
-        };
-      }
-
-      (event.rows || []).forEach((row) => {
-        const rank = parseInt(row.rk, 10);
-        if (Number.isNaN(rank) || rank < 1 || rank > 32) return;
-
-        const seconds = parseTimeToSeconds(row.ti);
-        if (!Number.isFinite(seconds)) return;
-
-        groupedAverages[groupKey].totals[rank] += seconds;
-        groupedAverages[groupKey].counts[rank] += 1;
-      });
-    });
-  }
-
-  function populateAverageSelect() {
-    Object.entries(groupedAverages)
-      .sort((a, b) => a[1].label.localeCompare(b[1].label))
-      .forEach(([key, info]) => {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = info.label;
-        averageSelect.appendChild(option);
-      });
-  }
-
-  function renderAverages(key) {
-    const group = groupedAverages[key];
-    if (!group) return;
-
-    averageBody.innerHTML = '';
-
-    for (let rank = 1; rank <= 32; rank += 1) {
-      const count = group.counts[rank];
-      const total = group.totals[rank];
-      const avg = count ? total / count : NaN;
-
-      const tr = document.createElement('tr');
-
-      const rankTd = document.createElement('td');
-      rankTd.textContent = rank;
-      tr.appendChild(rankTd);
-
-      const avgTd = document.createElement('td');
-      avgTd.textContent = count ? formatSecondsToTime(avg) : '—';
-      tr.appendChild(avgTd);
-
-      const samplesTd = document.createElement('td');
-      samplesTd.textContent = count ? count : '0';
-      tr.appendChild(samplesTd);
-
-      averageBody.appendChild(tr);
-    }
-  }
-
-  averageSelect.addEventListener('change', (event) => {
-    renderAverages(event.target.value);
-  });
-
   eventSelect.addEventListener('change', (event) => {
     renderEvent(event.target.value);
   });
 
   renderHeaders();
   populateSelect();
-  buildGroupedAverages();
-  populateAverageSelect();
   if (eventSelect.options.length) {
     eventSelect.selectedIndex = 0;
     renderEvent(eventSelect.value);
-  }
-  if (averageSelect.options.length) {
-    averageSelect.selectedIndex = 0;
-    renderAverages(averageSelect.value);
   }
 </script>
