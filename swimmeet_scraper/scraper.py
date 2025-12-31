@@ -71,11 +71,6 @@ class SwimMeetScraper:
     def _parse_payload(self, payload: bytes, content_type: str) -> List[Dict[str, Any]]:
         content_type = content_type.lower() if content_type else ""
 
-        try:
-            text = payload.decode("utf-8")
-        except UnicodeDecodeError as exc:
-            raise SwimMeetScraperError("Response could not be decoded as UTF-8") from exc
-
         if "xml" in content_type or "<xml" in text.lower() or "<results" in text.lower():
             return self._parse_xml_content(text)
 
