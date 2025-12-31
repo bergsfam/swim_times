@@ -84,35 +84,6 @@ def _load_config(path: Path) -> List[Dict[str, Any]]:
     return normalized
 
 
-def _expand_seasons(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    expanded: List[Dict[str, Any]] = []
-
-    for idx, event in enumerate(events):
-        if "seasons" not in event:
-            expanded.append(event)
-            continue
-
-        seasons = event["seasons"]
-        if not isinstance(seasons, list):
-            raise ValueError(f"Entry {idx} `seasons` must be a list of season strings.")
-        if "out" not in event or "{season}" not in str(event["out"]):
-            raise ValueError(
-                "Entries that specify `seasons` must include an `out` path containing a {season} placeholder."
-            )
-
-        base_event = {key: value for key, value in event.items() if key != "seasons"}
-        out_template = str(base_event["out"])
-
-        for season in seasons:
-            if not isinstance(season, str):
-                raise ValueError(f"Entry {idx} season values must be strings: {season!r}")
-            season_event = {**base_event, "season": season}
-            season_event["out"] = out_template.format(season=season)
-            expanded.append(season_event)
-
-    return expanded
-
-
 def handle_fetch(args: argparse.Namespace) -> int:
     scraper = SwimMeetScraper(base_url=args.base_url, timeout=args.timeout)
     try:
@@ -134,7 +105,7 @@ def handle_fetch(args: argparse.Namespace) -> int:
 
 def handle_fetch_all(args: argparse.Namespace) -> int:
     try:
-        events = _expand_seasons(_load_config(Path(args.config)))
+        events = _load_config(Path(args.config))
     except Exception as exc:
         logging.error("Could not read config: %s", exc)
         return 1
