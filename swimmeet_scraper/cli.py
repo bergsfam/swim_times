@@ -37,7 +37,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     fetch_parser = subparsers.add_parser("fetch", help="Fetch a single event.")
     _add_event_arguments(fetch_parser)
-    fetch_parser.add_argument("--out", required=True, help="Output CSV path.")
+    fetch_parser.add_argument(
+        "--out",
+        help=(
+            "Output CSV path. Defaults to the deterministic name under _data/ "
+            "(e.g., 2024-2025-finals-girls-d1-50-freestyle.csv)."
+        ),
+    )
 
     fetch_all_parser = subparsers.add_parser("fetch-all", help="Fetch events defined in a config file.")
     fetch_all_parser.add_argument("--config", required=True, help="Path to YAML or JSON config file.")
@@ -120,8 +126,18 @@ def _build_output_path(event: Dict[str, Any]) -> Path:
 def handle_fetch(args: argparse.Namespace) -> int:
     scraper = SwimMeetScraper(base_url=args.base_url, timeout=args.timeout)
     try:
+        default_out = _build_output_path(
+            {
+                "season": args.season,
+                "phase": args.phase,
+                "gender": args.gender,
+                "division": args.division,
+                "event_slug": args.event_slug,
+                "folder": "_data",
+            }
+        )
         scraper.scrape_to_csv(
-            out_path=args.out,
+            out_path=str(Path(args.out) if args.out else default_out),
             season=args.season,
             phase=args.phase,
             gender=args.gender,

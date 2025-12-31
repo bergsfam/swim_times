@@ -1,0 +1,66 @@
+---
+layout: default
+title: Swim Meet Results
+permalink: /events/
+---
+
+<h1>Swim Meet Results</h1>
+<p>Data tables below are generated directly from the CSV files in <code>_data/</code>. Each card links back to the source compilation URL and shows when the CSV was last updated on disk.</p>
+
+{% assign base_url = site.swimmeet_base_url | default: 'https://www.swimmeet.com' %}
+{% assign default_state = site.swimmeet_default_state | default: 'ohio' %}
+{% assign datasets = site.data | sort %}
+
+{% for dataset in datasets %}
+  {% assign name = dataset[0] %}
+  {% assign rows = dataset[1] %}
+  {% if rows and rows.size > 0 %}
+    {% assign parts = name | split: '-' %}
+    {% if parts.size >= 6 %}
+      {% assign season = parts[0] | append: '-' | append: parts[1] %}
+      {% assign phase = parts[2] %}
+      {% assign gender = parts[3] %}
+      {% assign division = parts[4] | upcase %}
+      {% assign event_slug = '' %}
+      {% for part in parts %}
+        {% if forloop.index0 >= 5 %}
+          {% if event_slug != '' %}
+            {% assign event_slug = event_slug | append: '-' %}
+          {% endif %}
+          {% assign event_slug = event_slug | append: part %}
+        {% endif %}
+      {% endfor %}
+      {% assign event_title = event_slug | replace: '-', ' ' | capitalize %}
+      {% assign file_path = '/_data/' | append: name | append: '.csv' %}
+      {% assign last_updated = file_path | file_modified_time | date: '%Y-%m-%d %H:%M %Z' %}
+      {% assign source_url = base_url | append: '/' | append: default_state | append: '/' | append: season | append: '/compilation/' | append: phase | append: '/' | append: gender | append: '-' | append: division | append: '-' | append: event_slug | append: '.xml' %}
+      {% assign headers = rows[0] | keys | sort %}
+      <div class="event-card" id="{{ name }}">
+        <h2>{{ event_title }} ({{ gender | capitalize }} {{ division }})</h2>
+        <p class="meta">
+          Season: <strong>{{ season }}</strong> · Phase: <strong>{{ phase | capitalize }}</strong> · Division: <strong>{{ division }}</strong> ·
+          Last updated: <strong>{{ last_updated }}</strong> ·
+          Source: <a href="{{ source_url }}">{{ source_url }}</a>
+        </p>
+        <table>
+          <thead>
+            <tr>
+              {% for header in headers %}
+                <th>{{ header }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+              <tr>
+                {% for header in headers %}
+                  <td>{{ row[header] }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endfor %}
