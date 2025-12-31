@@ -4,11 +4,13 @@ import csv
 import json
 import logging
 import os
+import re
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
+from xml.etree import ElementTree
 
 
 logger = logging.getLogger(__name__)
@@ -69,6 +71,9 @@ class SwimMeetScraper:
         content_type = content_type.lower() if content_type else ""
         text = payload.decode("utf-8")
 
+        if "xml" in content_type or "<xml" in text.lower():
+            return self._parse_xml_content(text)
+
         if "json" in content_type or text.strip().startswith("{") or text.strip().startswith("["):
             try:
                 parsed: Any = json.loads(text)
@@ -88,6 +93,37 @@ class SwimMeetScraper:
         if reader.fieldnames is None:
             raise SwimMeetScraperError("CSV payload missing headers")
         return [self._ensure_row_dict(row) for row in reader]
+
+    def _parse_xml_content(self, text: str) -> List[Dict[str, Any]]:
+        match = re.search(r"<xml[^>]*>(.*?)</xml>", text, re.IGNORECASE | re.DOTALL)
+        if not match:
+            raise SwimMeetScraperError("XML block not found in response")
+
+        try:
+            root = ElementTree.fromstring(match.group(0))
+        except ElementTree.ParseError as exc:
+            raise SwimMeetScraperError("Response contained invalid XML") from exc
+
+        rows: List[Dict[str, Any]] = []
+
+        def is_result_tag(tag: str) -> bool:
+            clean_tag = tag.rsplit("}", 1)[-1]  # strip namespace if present
+            return clean_tag.lower() == "result"
+
+        for element in root.iter():
+            if not is_result_tag(element.tag):
+                continue
+
+            row = {
+                key: element.attrib.get(key, "")
+                for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")
+            }
+            rows.append(row)
+
+        if not rows:
+            raise SwimMeetScraperError("XML payload did not include any results")
+
+        return rows
 
     def _ensure_row_dict(self, row: Any) -> Dict[str, Any]:
         if not isinstance(row, dict):
