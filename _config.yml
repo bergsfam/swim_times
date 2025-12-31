@@ -1,0 +1,5 @@
+title: Swim Meet Results
+swimmeet_base_url: https://www.swimmeet.com
+swimmeet_default_state: ohio
+markdown: kramdown
+plugins: []
