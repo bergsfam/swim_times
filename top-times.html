@@ -1,0 +1,161 @@
+---
+layout: default
+title: Top 32 Swim Times
+permalink: /top-times/
+---
+
+<h1>Top 32 Swim Times</h1>
+<p>
+  Choose an event to view the top 32 times. Automatic qualifiers are marked and each result shows the meet code.
+</p>
+
+<div class="event-selector" style="margin: 1rem 0 1.5rem;">
+  <label for="eventSelect" style="font-weight: 600; margin-right: 0.5rem;">Event:</label>
+  <select id="eventSelect" style="padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid #cbd5e1; min-width: 280px;">
+  </select>
+</div>
+
+<div id="eventMeta" class="meta" style="margin-bottom: 0.5rem;"></div>
+
+<div id="tableContainer" class="event-card" style="display: none;">
+  <h2 id="eventTitle" style="margin-top: 0; margin-bottom: 0.35rem;"></h2>
+  <p id="eventDetails" class="meta" style="margin-top: 0;"></p>
+  <div style="overflow-x: auto;">
+    <table id="resultsTable">
+      <thead>
+        <tr id="tableHeaders"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const columns = [
+    { key: 'rk', label: 'Rank' },
+    { key: 'nm', label: 'Name' },
+    { key: 'gr', label: 'Grade' },
+    { key: 'sh', label: 'School' },
+    { key: 'ti', label: 'Time' },
+    { key: 'mt', label: 'Meet' },
+    { key: 'auto', label: 'AQ' },
+  ];
+
+  const eventData = {
+    {% assign base_url = site.swimmeet_base_url | default: 'https://www.swimmeet.com' %}
+    {% assign default_state = site.swimmeet_default_state | default: 'ohio' %}
+    {% assign datasets = site.data %}
+    {% for dataset in datasets %}
+      {% assign name = dataset[0] %}
+      {% assign rows = dataset[1] %}
+
+      {% if rows and rows.size and rows[0] and rows[0].size and (rows[0].rk or rows[0].nm or rows[0].ti) %}
+        {% assign parts = name | split: '-' %}
+        {% if parts.size >= 6 %}
+          {% assign season = parts[0] | append: '-' | append: parts[1] %}
+          {% assign phase = parts[2] %}
+          {% assign gender = parts[3] %}
+          {% assign division_slug = parts[4] %}
+          {% assign division_label = division_slug | upcase %}
+
+          {% assign event_slug = parts[5] %}
+          {% if parts.size > 6 %}
+            {% for part in parts offset:6 %}
+              {% assign event_slug = event_slug | append: '-' | append: part %}
+            {% endfor %}
+          {% endif %}
+
+          {% assign event_title = event_slug | replace: '-', ' ' | capitalize %}
+
+          {% assign source_url = base_url
+            | append: '/' | append: default_state
+            | append: '/' | append: season
+            | append: '/compilation/' | append: phase
+            | append: '/' | append: gender
+            | append: '-' | append: division_slug
+            | append: '-' | append: event_slug
+            | append: '.xml'
+          %}
+
+          "{{ name | escape }}": {
+            label: "{{ event_title | escape }} ({{ gender | capitalize | escape }} {{ division_label | escape }})",
+            season: "{{ season | escape }}",
+            phase: "{{ phase | escape }}",
+            division: "{{ division_label | escape }}",
+            gender: "{{ gender | escape }}",
+            sourceUrl: "{{ source_url | escape }}",
+            rows: {{ rows | slice: 0, 32 | jsonify }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  };
+
+  const eventSelect = document.getElementById('eventSelect');
+  const tableContainer = document.getElementById('tableContainer');
+  const tableHeaders = document.getElementById('tableHeaders');
+  const tableBody = document.getElementById('tableBody');
+  const eventTitle = document.getElementById('eventTitle');
+  const eventDetails = document.getElementById('eventDetails');
+
+  function renderHeaders() {
+    tableHeaders.innerHTML = '';
+    columns.forEach((col) => {
+      const th = document.createElement('th');
+      th.textContent = col.label;
+      tableHeaders.appendChild(th);
+    });
+  }
+
+  function renderRows(rows) {
+    tableBody.innerHTML = '';
+    rows.forEach((row) => {
+      const tr = document.createElement('tr');
+      columns.forEach((col) => {
+        const td = document.createElement('td');
+        if (col.key === 'auto') {
+          if (row[col.key] && row[col.key].toLowerCase() === 'yes') {
+            td.innerHTML = '<span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:999px;padding:0.2rem 0.6rem;font-weight:600;">AQ</span>';
+          } else {
+            td.textContent = '';
+          }
+        } else {
+          td.textContent = row[col.key] || '';
+        }
+        tr.appendChild(td);
+      });
+      tableBody.appendChild(tr);
+    });
+  }
+
+  function renderEvent(key) {
+    const event = eventData[key];
+    if (!event) return;
+
+    eventTitle.textContent = event.label;
+    eventDetails.innerHTML = `Season: <strong>${event.season}</strong> · Phase: <strong>${event.phase}</strong> · Source: <a href="${event.sourceUrl}" target="_blank" rel="noopener">${event.sourceUrl}</a>`;
+
+    renderRows(event.rows || []);
+    tableContainer.style.display = 'block';
+  }
+
+  function populateSelect() {
+    Object.keys(eventData).sort().forEach((key) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = eventData[key].label;
+      eventSelect.appendChild(option);
+    });
+  }
+
+  eventSelect.addEventListener('change', (event) => {
+    renderEvent(event.target.value);
+  });
+
+  renderHeaders();
+  populateSelect();
+  if (eventSelect.options.length) {
+    eventSelect.selectedIndex = 0;
+    renderEvent(eventSelect.value);
+  }
+</script>
