@@ -9,7 +9,7 @@ permalink: /events/
 
 {% assign base_url = site.swimmeet_base_url | default: 'https://www.swimmeet.com' %}
 {% assign default_state = site.swimmeet_default_state | default: 'ohio' %}
-{% assign datasets = site.data | to_a | sort_natural: 0 %}
+{% assign datasets = site.data | sort %}
 
 {% for dataset in datasets %}
   {% assign name = dataset[0] %}
@@ -31,7 +31,7 @@ permalink: /events/
         {% endif %}
       {% endfor %}
       {% assign event_title = event_slug | replace: '-', ' ' | capitalize %}
-      {% assign file_path = '_data/' | append: name | append: '.csv' %}
+      {% assign file_path = '/_data/' | append: name | append: '.csv' %}
       {% assign last_updated = file_path | file_modified_time | date: '%Y-%m-%d %H:%M %Z' %}
       {% assign source_url = base_url | append: '/' | append: default_state | append: '/' | append: season | append: '/compilation/' | append: phase | append: '/' | append: gender | append: '-' | append: division | append: '-' | append: event_slug | append: '.xml' %}
       {% assign headers = rows[0] | keys | sort %}
