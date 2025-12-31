@@ -22,11 +22,17 @@ def build_compilation_url(
     division: str,
     event_slug: str,
     state: str,
+    *,
+    folder: str = "compilation",
 ) -> str:
     """Build a deterministic URL for fetching compiled event data."""
 
-    safe_parts = [quote(part.strip("/")) for part in (state, season, phase, gender, division, event_slug)]
-    return "/".join([base_url.rstrip("/")] + safe_parts) + ".json"
+    safe_parts = [
+        quote(part.strip("/"), safe="-")
+        for part in (state, season, folder, phase)
+    ]
+    filename = quote(f"{gender}-{division}-{event_slug}".replace(" ", "-"), safe="-")
+    return "/".join([base_url.rstrip("/")] + safe_parts + [filename + ".html"])
 
 
 class SwimMeetScraperError(Exception):
@@ -37,7 +43,7 @@ class SwimMeetScraperError(Exception):
 class SwimMeetScraper:
     """Scrape swim meet event results from a JSON/CSV endpoint."""
 
-    base_url: str = "https://example.com/swimmeets"
+    base_url: str = "https://www.swimmeet.com"
     timeout: float = 10.0
 
     def _build_url(
