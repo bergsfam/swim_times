@@ -69,17 +69,31 @@ class SwimMeetScraper:
         )
 
     def _parse_payload(self, payload: bytes, content_type: str) -> List[Dict[str, Any]]:
-        content_type = content_type.lower() if content_type else ""
-
-        if "xml" in content_type or "<xml" in text.lower() or "<results" in text.lower():
+        content_type = (content_type or "").lower()
+    
+        # 1) Decode bytes -> text safely
+        # Try to honor charset if the server provides one
+        charset_match = re.search(r"charset=([^\s;]+)", content_type)
+        encoding = charset_match.group(1) if charset_match else "utf-8"
+    
+        try:
+            text = payload.decode(encoding, errors="replace")
+        except LookupError:
+            # Unknown encoding from server; fall back
+            text = payload.decode("utf-8", errors="replace")
+    
+        text_lc = text.lower()
+    
+        # 2) Choose parser
+        if "xml" in content_type or "<xml" in text_lc or "<results" in text_lc:
             return self._parse_xml_content(text)
-
-        if "json" in content_type or text.strip().startswith("{") or text.strip().startswith("["):
+    
+        if "json" in content_type or text.lstrip().startswith("{") or text.lstrip().startswith("["):
             try:
                 parsed: Any = json.loads(text)
             except json.JSONDecodeError as exc:
                 raise SwimMeetScraperError("Response was not valid JSON") from exc
-
+    
             if isinstance(parsed, dict):
                 if "results" in parsed and isinstance(parsed["results"], list):
                     return [self._ensure_row_dict(item) for item in parsed["results"]]
@@ -87,30 +101,34 @@ class SwimMeetScraper:
             if isinstance(parsed, list):
                 return [self._ensure_row_dict(item) for item in parsed]
             raise SwimMeetScraperError("JSON payload was not a list or dict")
-
+    
         # assume CSV
         reader = csv.DictReader(text.splitlines())
         if reader.fieldnames is None:
             raise SwimMeetScraperError("CSV payload missing headers")
         return [self._ensure_row_dict(row) for row in reader]
-
+        
     def _parse_xml_content(self, text: str) -> List[Dict[str, Any]]:
-        match = re.search(r"<xml[^>]*>(.*?)</xml>", text, re.IGNORECASE | re.DOTALL)
-        xml_text = match.group(0) if match else text.strip()
-
+        # If the response is an HTML page (common for errors), bail early
+        if "<html" in text.lower():
+            raise SwimMeetScraperError("Got HTML instead of XML")
+    
+        # Prefer pulling a <results> block if present (more specific than <xml>)
+        m = re.search(r"(<results[^>]*>.*?</results>)", text, re.IGNORECASE | re.DOTALL)
+        xml_text = m.group(1) if m else text.strip()
+    
         try:
             root = ElementTree.fromstring(xml_text)
         except ElementTree.ParseError as exc:
             raise SwimMeetScraperError("Response contained invalid XML") from exc
-
+    
         rows: List[Dict[str, Any]] = []
         for result in root.findall(".//result"):
-            row = {key: value for key, value in result.attrib.items()}
-            rows.append(row)
-
+            rows.append(dict(result.attrib))
+    
         if not rows:
             raise SwimMeetScraperError("XML payload did not include any results")
-
+    
         return rows
 
     def _ensure_row_dict(self, row: Any) -> Dict[str, Any]:
