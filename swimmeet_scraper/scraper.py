@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import importlib.util
 import json
 import logging
 import os
@@ -129,6 +130,7 @@ class SwimMeetScraper:
         event_slug: str,
         state: str,
         timeout: Optional[float] = None,
+        render_js: bool = False,
     ) -> List[Dict[str, Any]]:
         url = self._build_url(season, phase, gender, division, event_slug, state)
         logger.info("Fetching %s", url)
@@ -150,8 +152,13 @@ class SwimMeetScraper:
 
         try:
             return self._parse_payload(payload, content_type)
-        except SwimMeetScraperError:
-            raise
+        except SwimMeetScraperError as exc:
+            if not render_js:
+                raise
+
+            logger.info("Retrying %s with Playwright rendering after parse failure: %s", url, exc)
+            rendered_payload = self._fetch_with_playwright(url, timeout=timeout)
+            return self._parse_payload(rendered_payload, "text/html")
         except Exception as exc:  # pragma: no cover - safety net
             logger.exception("Failed to parse response from %s", url)
             raise SwimMeetScraperError(f"Failed to parse response from {url}: {exc}") from exc
@@ -191,3 +198,24 @@ class SwimMeetScraper:
                 if key not in fieldnames:
                     fieldnames.append(key)
         return fieldnames
+
+    def _fetch_with_playwright(self, url: str, timeout: Optional[float]) -> bytes:
+        if importlib.util.find_spec("playwright") is None:
+            raise SwimMeetScraperError(
+                "Playwright is not installed. Install it or disable render_js to proceed."
+            )
+
+        from playwright.sync_api import sync_playwright
+
+        page_timeout_ms = int((timeout or self.timeout) * 1000)
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                page = browser.new_page()
+                page.goto(url, wait_until="networkidle", timeout=page_timeout_ms)
+                content = page.content()
+            finally:
+                browser.close()
+
+        return content.encode("utf-8")
