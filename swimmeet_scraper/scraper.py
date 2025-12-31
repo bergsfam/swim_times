@@ -35,7 +35,7 @@ def build_compilation_url(
         for part in (state, season, folder, phase)
     ]
     filename = quote(f"{gender}-{division}-{event_slug}".replace(" ", "-"), safe="-")
-    return "/".join([base_url.rstrip("/")] + safe_parts + [filename + ".html"])
+    return "/".join([base_url.rstrip("/")] + safe_parts + [filename + ".xml"])
 
 
 class SwimMeetScraperError(Exception):
@@ -70,9 +70,18 @@ class SwimMeetScraper:
 
     def _parse_payload(self, payload: bytes, content_type: str) -> List[Dict[str, Any]]:
         content_type = content_type.lower() if content_type else ""
-        text = payload.decode("utf-8")
 
-        if "xml" in content_type or "<xml" in text.lower():
+        if not isinstance(payload, (bytes, bytearray)):
+            raise SwimMeetScraperError("Response payload was not bytes")
+
+        try:
+            text = payload.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise SwimMeetScraperError("Response could not be decoded as UTF-8") from exc
+        except Exception as exc:  # pragma: no cover - safety net
+            raise SwimMeetScraperError("Response payload could not be decoded") from exc
+
+        if "xml" in content_type or "<xml" in text.lower() or "<results" in text.lower():
             return self._parse_xml_content(text)
 
         if "json" in content_type or text.strip().startswith("{") or text.strip().startswith("["):
@@ -97,19 +106,17 @@ class SwimMeetScraper:
 
     def _parse_xml_content(self, text: str) -> List[Dict[str, Any]]:
         match = re.search(r"<xml[^>]*>(.*?)</xml>", text, re.IGNORECASE | re.DOTALL)
-        if not match:
-            raise SwimMeetScraperError("XML block not found in response")
+        xml_text = match.group(0) if match else text.strip()
 
         try:
-            root = ElementTree.fromstring(match.group(0))
+            root = ElementTree.fromstring(xml_text)
         except ElementTree.ParseError as exc:
             raise SwimMeetScraperError("Response contained invalid XML") from exc
 
         rows: List[Dict[str, Any]] = []
-        for results in root.findall(".//results"):
-            for result in results.findall("result"):
-                row = {key: result.attrib.get(key, "") for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")}
-                rows.append(row)
+        for result in root.findall(".//result"):
+            row = {key: value for key, value in result.attrib.items()}
+            rows.append(row)
 
         if not rows:
             raise SwimMeetScraperError("XML payload did not include any results")
@@ -135,7 +142,12 @@ class SwimMeetScraper:
         url = self._build_url(season, phase, gender, division, event_slug, state)
         logger.info("Fetching %s", url)
 
-        request = Request(url, headers={"Accept": "application/json, text/csv;q=0.9, */*;q=0.8"})
+        request = Request(
+            url,
+            headers={
+                "Accept": "application/xml, application/json, text/csv;q=0.9, */*;q=0.8"
+            },
+        )
         try:
             with urlopen(request, timeout=timeout or self.timeout) as response:
                 content_type = response.headers.get("Content-Type", "")
@@ -154,11 +166,18 @@ class SwimMeetScraper:
             return self._parse_payload(payload, content_type)
         except SwimMeetScraperError as exc:
             if not render_js:
-                raise
+                logger.warning("Skipping %s due to parse failure: %s", url, exc)
+                return []
 
             logger.info("Retrying %s with Playwright rendering after parse failure: %s", url, exc)
             rendered_payload = self._fetch_with_playwright(url, timeout=timeout)
-            return self._parse_payload(rendered_payload, "text/html")
+            try:
+                return self._parse_payload(rendered_payload, "text/html")
+            except SwimMeetScraperError as render_exc:
+                logger.warning(
+                    "Skipping %s after render retry due to parse failure: %s", url, render_exc
+                )
+                return []
         except Exception as exc:  # pragma: no cover - safety net
             logger.exception("Failed to parse response from %s", url)
             raise SwimMeetScraperError(f"Failed to parse response from {url}: {exc}") from exc
