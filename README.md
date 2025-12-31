@@ -48,6 +48,26 @@ Then run:
 python -m swimmeet_scraper.cli fetch-all --config events.yaml
 ```
 
+Fetching multiple seasons of the same event
+-------------------------------------------
+If you want several seasons (for example 2024-2025, 2023-2024, and 2022-2023),
+you can supply a `seasons` list in the config. The `out` path must include a
+`{season}` placeholder so each CSV ends up in its own file:
+
+```yaml
+events:
+  - seasons: [2024-2025, 2023-2024, 2022-2023]
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+    state: ohio
+    out: _data/{season}-girls-d1-50-freestyle.csv
+```
+
+This expands into three fetches, producing `_data/2024-2025-girls-d1-50-freestyle.csv`,
+`_data/2023-2024-girls-d1-50-freestyle.csv`, and `_data/2022-2023-girls-d1-50-freestyle.csv`.
+
 Adjust `--base-url` if your swim meet data lives elsewhere (defaults to
 `https://example.com/swimmeets`). Use `--timeout` to override the request
 timeout per call and `--verbose` for debug logging.
