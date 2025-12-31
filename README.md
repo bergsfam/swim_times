@@ -57,5 +57,7 @@ pattern. Each download is written directly into the configured `_data` folder
 with no additional templating required.
 
 Adjust `--base-url` if your swim meet data lives elsewhere (defaults to
-`https://example.com/swimmeets`). Use `--timeout` to override the request
-timeout per call and `--verbose` for debug logging.
+`https://www.swimmeet.com` which builds URLs like
+`https://www.swimmeet.com/ohio/2023-2024/compilation/finals/boys-d2-200-medley-relay.html`).
+Use `--timeout` to override the request timeout per call and `--verbose` for
+debug logging.

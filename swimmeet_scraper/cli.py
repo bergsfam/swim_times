@@ -16,7 +16,7 @@ else:  # pragma: no cover - optional dependency
 from .scraper import SwimMeetScraper, SwimMeetScraperError, build_compilation_url
 
 
-DEFAULT_BASE_URL = "https://example.com/swimmeets"
+DEFAULT_BASE_URL = "https://www.swimmeet.com"
 DEFAULT_TIMEOUT = 10.0
 
 
