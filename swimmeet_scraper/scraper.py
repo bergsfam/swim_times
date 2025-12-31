@@ -6,7 +6,6 @@ import json
 import logging
 import os
 import re
-import html
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional
 from urllib.error import HTTPError, URLError
@@ -73,7 +72,7 @@ class SwimMeetScraper:
         content_type = content_type.lower() if content_type else ""
         text = payload.decode("utf-8")
 
-        if "xml" in content_type or "<xml" in text.lower() or "&lt;xml" in text.lower():
+        if "xml" in content_type or "<xml" in text.lower():
             return self._parse_xml_content(text)
 
         if "json" in content_type or text.strip().startswith("{") or text.strip().startswith("["):
@@ -97,11 +96,7 @@ class SwimMeetScraper:
         return [self._ensure_row_dict(row) for row in reader]
 
     def _parse_xml_content(self, text: str) -> List[Dict[str, Any]]:
-        unescaped_text = html.unescape(text)
-
-        match = re.search(
-            r"<xml[^>]*>(.*?)</xml>", unescaped_text, re.IGNORECASE | re.DOTALL
-        )
+        match = re.search(r"<xml[^>]*>(.*?)</xml>", text, re.IGNORECASE | re.DOTALL)
         if not match:
             raise SwimMeetScraperError("XML block not found in response")
 
@@ -111,20 +106,10 @@ class SwimMeetScraper:
             raise SwimMeetScraperError("Response contained invalid XML") from exc
 
         rows: List[Dict[str, Any]] = []
-
-        def is_result_tag(tag: str) -> bool:
-            clean_tag = tag.rsplit("}", 1)[-1]  # strip namespace if present
-            return clean_tag.lower() == "result"
-
-        for element in root.iter():
-            if not is_result_tag(element.tag):
-                continue
-
-            row = {
-                key: element.attrib.get(key, "")
-                for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")
-            }
-            rows.append(row)
+        for results in root.findall(".//results"):
+            for result in results.findall("result"):
+                row = {key: result.attrib.get(key, "") for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")}
+                rows.append(row)
 
         if not rows:
             raise SwimMeetScraperError("XML payload did not include any results")
@@ -168,10 +153,6 @@ class SwimMeetScraper:
         try:
             return self._parse_payload(payload, content_type)
         except SwimMeetScraperError as exc:
-            sidecar_rows = self._attempt_sidecar_xml(url, timeout)
-            if sidecar_rows is not None:
-                return sidecar_rows
-
             if not render_js:
                 raise
 
@@ -217,36 +198,6 @@ class SwimMeetScraper:
                 if key not in fieldnames:
                     fieldnames.append(key)
         return fieldnames
-
-    def _attempt_sidecar_xml(
-        self, html_url: str, timeout: Optional[float]
-    ) -> Optional[List[Dict[str, Any]]]:
-        if not html_url.lower().endswith(".html"):
-            return None
-
-        xml_url = re.sub(r"\.html(?:\?.*)?$", ".xml", html_url, flags=re.IGNORECASE)
-        logger.info("Fetching sidecar XML %s", xml_url)
-
-        request = Request(
-            xml_url,
-            headers={"Accept": "text/xml,application/xml;q=0.9, */*;q=0.8"},
-        )
-
-        try:
-            with urlopen(request, timeout=timeout or self.timeout) as response:
-                content_type = response.headers.get("Content-Type", "")
-                payload = response.read()
-        except Exception as exc:  # pragma: no cover - network edge cases
-            logger.debug("Sidecar XML fetch failed for %s: %s", xml_url, exc)
-            return None
-
-        try:
-            return self._parse_payload(payload, content_type)
-        except SwimMeetScraperError as exc:
-            logger.debug(
-                "Sidecar XML parse failed for %s with error: %s", xml_url, exc
-            )
-            return None
 
     def _fetch_with_playwright(self, url: str, timeout: Optional[float]) -> bytes:
         if importlib.util.find_spec("playwright") is None:
