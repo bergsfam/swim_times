@@ -5,43 +5,75 @@ permalink: /events/
 ---
 
 <h1>Swim Meet Results</h1>
-<p>Data tables below are generated directly from the CSV files in <code>_data/</code>. Each card links back to the source compilation URL and shows when the CSV was last updated on disk.</p>
+<p>
+  Data tables below are generated directly from the CSV files in <code>_data/</code>.
+  Each card links back to the source compilation URL.
+</p>
 
 {% assign base_url = site.swimmeet_base_url | default: 'https://www.swimmeet.com' %}
 {% assign default_state = site.swimmeet_default_state | default: 'ohio' %}
-{% assign datasets = site.data | sort %}
+{% assign datasets = site.data %}
 
 {% for dataset in datasets %}
   {% assign name = dataset[0] %}
   {% assign rows = dataset[1] %}
-  {% if rows and rows.size > 0 %}
+
+  {%- comment -%}
+  Strict guard:
+  - rows exists
+  - rows has at least one row
+  - first row is a hash
+  - first row contains at least one expected swim-result key
+  {%- endcomment -%}
+  {% if rows and rows.size and rows[0] and rows[0].size and (rows[0].rk or rows[0].nm or rows[0].ti) %}
+
     {% assign parts = name | split: '-' %}
+
+    {%- comment -%}
+    Expected filename format:
+    2022-2023-finals-boys-d1-100-backstroke
+    {%- endcomment -%}
     {% if parts.size >= 6 %}
       {% assign season = parts[0] | append: '-' | append: parts[1] %}
       {% assign phase = parts[2] %}
       {% assign gender = parts[3] %}
-      {% assign division = parts[4] | upcase %}
-      {% assign event_slug = '' %}
-      {% for part in parts %}
-        {% if forloop.index0 >= 5 %}
-          {% if event_slug != '' %}
-            {% assign event_slug = event_slug | append: '-' %}
-          {% endif %}
-          {% assign event_slug = event_slug | append: part %}
-        {% endif %}
-      {% endfor %}
+      {% assign division_slug = parts[4] %}
+      {% assign division_label = division_slug | upcase %}
+
+      {% assign event_slug = parts[5] %}
+      {% if parts.size > 6 %}
+        {% for part in parts offset:6 %}
+          {% assign event_slug = event_slug | append: '-' | append: part %}
+        {% endfor %}
+      {% endif %}
+
       {% assign event_title = event_slug | replace: '-', ' ' | capitalize %}
-      {% assign file_path = '/_data/' | append: name | append: '.csv' %}
-      {% assign last_updated = file_path | file_modified_time | date: '%Y-%m-%d %H:%M %Z' %}
-      {% assign source_url = base_url | append: '/' | append: default_state | append: '/' | append: season | append: '/compilation/' | append: phase | append: '/' | append: gender | append: '-' | append: division | append: '-' | append: event_slug | append: '.xml' %}
-      {% assign headers = rows[0] | keys | sort %}
+
+      {% assign source_url = base_url
+        | append: '/' | append: default_state
+        | append: '/' | append: season
+        | append: '/compilation/' | append: phase
+        | append: '/' | append: gender
+        | append: '-' | append: division_slug
+        | append: '-' | append: event_slug
+        | append: '.xml'
+      %}
+
+      {% assign headers = rows[0] | keys %}
+
       <div class="event-card" id="{{ name }}">
-        <h2>{{ event_title }} ({{ gender | capitalize }} {{ division }})</h2>
+        <h2>{{ event_title }} ({{ gender | capitalize }} {{ division_label }})</h2>
+
         <p class="meta">
-          Season: <strong>{{ season }}</strong> · Phase: <strong>{{ phase | capitalize }}</strong> · Division: <strong>{{ division }}</strong> ·
-          Last updated: <strong>{{ last_updated }}</strong> ·
-          Source: <a href="{{ source_url }}">{{ source_url }}</a>
+          Season: <strong>{{ season }}</strong> ·
+          Phase: <strong>{{ phase | capitalize }}</strong> ·
+          Division: <strong>{{ division_label }}</strong> ·
+          Source:
+          <a href="{{ source_url }}" target="_blank" rel="noopener">
+            {{ source_url }}
+          </a>
         </p>
+
         <table>
           <thead>
             <tr>
