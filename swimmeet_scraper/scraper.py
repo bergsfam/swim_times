@@ -35,7 +35,7 @@ def build_compilation_url(
         for part in (state, season, folder, phase)
     ]
     filename = quote(f"{gender}-{division}-{event_slug}".replace(" ", "-"), safe="-")
-    return "/".join([base_url.rstrip("/")] + safe_parts + [filename + ".html"])
+    return "/".join([base_url.rstrip("/")] + safe_parts + [filename + ".xml"])
 
 
 class SwimMeetScraperError(Exception):
@@ -72,7 +72,7 @@ class SwimMeetScraper:
         content_type = content_type.lower() if content_type else ""
         text = payload.decode("utf-8")
 
-        if "xml" in content_type or "<xml" in text.lower():
+        if "xml" in content_type or "<xml" in text.lower() or "<results" in text.lower():
             return self._parse_xml_content(text)
 
         if "json" in content_type or text.strip().startswith("{") or text.strip().startswith("["):
@@ -97,19 +97,17 @@ class SwimMeetScraper:
 
     def _parse_xml_content(self, text: str) -> List[Dict[str, Any]]:
         match = re.search(r"<xml[^>]*>(.*?)</xml>", text, re.IGNORECASE | re.DOTALL)
-        if not match:
-            raise SwimMeetScraperError("XML block not found in response")
+        xml_text = match.group(0) if match else text.strip()
 
         try:
-            root = ElementTree.fromstring(match.group(0))
+            root = ElementTree.fromstring(xml_text)
         except ElementTree.ParseError as exc:
             raise SwimMeetScraperError("Response contained invalid XML") from exc
 
         rows: List[Dict[str, Any]] = []
-        for results in root.findall(".//results"):
-            for result in results.findall("result"):
-                row = {key: result.attrib.get(key, "") for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")}
-                rows.append(row)
+        for result in root.findall(".//result"):
+            row = {key: value for key, value in result.attrib.items()}
+            rows.append(row)
 
         if not rows:
             raise SwimMeetScraperError("XML payload did not include any results")
@@ -135,7 +133,12 @@ class SwimMeetScraper:
         url = self._build_url(season, phase, gender, division, event_slug, state)
         logger.info("Fetching %s", url)
 
-        request = Request(url, headers={"Accept": "application/json, text/csv;q=0.9, */*;q=0.8"})
+        request = Request(
+            url,
+            headers={
+                "Accept": "application/xml, application/json, text/csv;q=0.9, */*;q=0.8"
+            },
+        )
         try:
             with urlopen(request, timeout=timeout or self.timeout) as response:
                 content_type = response.headers.get("Content-Type", "")
