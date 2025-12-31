@@ -14,6 +14,21 @@ from urllib.request import Request, urlopen
 logger = logging.getLogger(__name__)
 
 
+def build_compilation_url(
+    base_url: str,
+    season: str,
+    phase: str,
+    gender: str,
+    division: str,
+    event_slug: str,
+    state: str,
+) -> str:
+    """Build a deterministic URL for fetching compiled event data."""
+
+    safe_parts = [quote(part.strip("/")) for part in (state, season, phase, gender, division, event_slug)]
+    return "/".join([base_url.rstrip("/")] + safe_parts) + ".json"
+
+
 class SwimMeetScraperError(Exception):
     """Raised when scraping a swim meet event fails."""
 
@@ -34,8 +49,15 @@ class SwimMeetScraper:
         event_slug: str,
         state: str,
     ) -> str:
-        safe_parts = [quote(part.strip("/")) for part in (state, season, phase, gender, division, event_slug)]
-        return "/".join([self.base_url.rstrip("/")] + safe_parts) + ".json"
+        return build_compilation_url(
+            self.base_url,
+            season=season,
+            phase=phase,
+            gender=gender,
+            division=division,
+            event_slug=event_slug,
+            state=state,
+        )
 
     def _parse_payload(self, payload: bytes, content_type: str) -> List[Dict[str, Any]]:
         content_type = content_type.lower() if content_type else ""
