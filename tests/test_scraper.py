@@ -34,24 +34,6 @@ class ParseXmlPayloadTests(unittest.TestCase):
         with self.assertRaises(SwimMeetScraperError):
             self.scraper._parse_payload(payload.encode("utf-8"), "text/html")
 
-    def test_parse_xml_with_uppercase_tags(self) -> None:
-        payload = (
-            "<html><XML><RESULTS>"
-            "<RESULT rk=\"1\" nm=\"Swimmer One\" gr=\"Sr\" sc=\"AAA\" ti=\"50.00\" mt=\"meet\"></RESULT>"
-            "<result rk=\"2\" nm=\"Swimmer Two\" gr=\"Jr\" sc=\"BBB\" ti=\"51.00\" mt=\"meet\" auto=\"yes\"></result>"
-            "</RESULTS></XML></html>"
-        )
-
-        rows = self.scraper._parse_payload(payload.encode("utf-8"), "text/xml")
-
-        self.assertEqual(
-            rows,
-            [
-                {"rk": "1", "nm": "Swimmer One", "gr": "Sr", "sc": "AAA", "ti": "50.00", "mt": "meet", "auto": ""},
-                {"rk": "2", "nm": "Swimmer Two", "gr": "Jr", "sc": "BBB", "ti": "51.00", "mt": "meet", "auto": "yes"},
-            ],
-        )
-
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()

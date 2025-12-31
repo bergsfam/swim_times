@@ -105,20 +105,10 @@ class SwimMeetScraper:
             raise SwimMeetScraperError("Response contained invalid XML") from exc
 
         rows: List[Dict[str, Any]] = []
-
-        def is_result_tag(tag: str) -> bool:
-            clean_tag = tag.rsplit("}", 1)[-1]  # strip namespace if present
-            return clean_tag.lower() == "result"
-
-        for element in root.iter():
-            if not is_result_tag(element.tag):
-                continue
-
-            row = {
-                key: element.attrib.get(key, "")
-                for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")
-            }
-            rows.append(row)
+        for results in root.findall(".//results"):
+            for result in results.findall("result"):
+                row = {key: result.attrib.get(key, "") for key in ("rk", "nm", "gr", "sc", "ti", "mt", "auto")}
+                rows.append(row)
 
         if not rows:
             raise SwimMeetScraperError("XML payload did not include any results")
