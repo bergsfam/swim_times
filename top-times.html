@@ -1,0 +1,293 @@
+---
+layout: default
+title: Top 32 Swim Times
+permalink: /top-times/
+---
+
+<h1>Top 32 Swim Times</h1>
+<p>
+  Choose an event to view the top 32 times. Automatic qualifiers are marked and each result shows the meet code.
+</p>
+
+<div class="event-selector" style="margin: 1rem 0 1.5rem;">
+  <label for="eventSelect" style="font-weight: 600; margin-right: 0.5rem;">Event:</label>
+  <select id="eventSelect" style="padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid #cbd5e1; min-width: 280px;">
+  </select>
+</div>
+
+<div id="eventMeta" class="meta" style="margin-bottom: 0.5rem;"></div>
+
+<div id="tableContainer" class="event-card" style="display: none;">
+  <h2 id="eventTitle" style="margin-top: 0; margin-bottom: 0.35rem;"></h2>
+  <p id="eventDetails" class="meta" style="margin-top: 0;"></p>
+  <div style="overflow-x: auto;">
+    <table id="resultsTable">
+      <thead>
+        <tr id="tableHeaders"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div style="margin-top: 2.5rem; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc;">
+  <h2 style="margin-top: 0;">Average Top-32 Time by Event/Gender/Division and Rank</h2>
+  <p class="meta" style="margin-top: 0;">Averages are calculated from the available top-32 rows for each rank.</p>
+
+  <div class="event-selector" style="margin: 0.5rem 0 1rem;">
+    <label for="averageSelect" style="font-weight: 600; margin-right: 0.5rem;">Event:</label>
+    <select id="averageSelect" style="padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid #cbd5e1; min-width: 280px;"></select>
+  </div>
+
+  <div style="overflow-x: auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Average Time</th>
+          <th>Samples</th>
+        </tr>
+      </thead>
+      <tbody id="averageBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const columns = [
+    { key: 'rk', label: 'Rank' },
+    { key: 'nm', label: 'Name' },
+    { key: 'gr', label: 'Grade' },
+    { key: 'sh', label: 'School' },
+    { key: 'ti', label: 'Time' },
+    { key: 'mt', label: 'Meet' },
+    { key: 'auto', label: 'AQ' },
+  ];
+
+  const eventData = {
+    {% assign base_url = site.swimmeet_base_url | default: 'https://www.swimmeet.com' %}
+    {% assign default_state = site.swimmeet_default_state | default: 'ohio' %}
+    {% assign datasets = site.data %}
+    {% for dataset in datasets %}
+      {% assign name = dataset[0] %}
+      {% assign rows = dataset[1] %}
+
+      {% if rows and rows.size and rows[0] and rows[0].size and (rows[0].rk or rows[0].nm or rows[0].ti) %}
+        {% assign parts = name | split: '-' %}
+        {% if parts.size >= 6 %}
+          {% assign season = parts[0] | append: '-' | append: parts[1] %}
+          {% assign phase = parts[2] %}
+          {% assign gender = parts[3] %}
+          {% assign division_slug = parts[4] %}
+          {% assign division_label = division_slug | upcase %}
+
+          {% assign event_slug = parts[5] %}
+          {% if parts.size > 6 %}
+            {% for part in parts offset:6 %}
+              {% assign event_slug = event_slug | append: '-' | append: part %}
+            {% endfor %}
+          {% endif %}
+
+          {% assign event_title = event_slug | replace: '-', ' ' | capitalize %}
+
+          {% assign source_url = base_url
+            | append: '/' | append: default_state
+            | append: '/' | append: season
+            | append: '/compilation/' | append: phase
+            | append: '/' | append: gender
+            | append: '-' | append: division_slug
+            | append: '-' | append: event_slug
+            | append: '.xml'
+          %}
+
+          "{{ name | escape }}": {
+            label: "{{ event_title | escape }} ({{ gender | capitalize | escape }} {{ division_label | escape }})",
+            eventName: "{{ event_title | escape }}",
+            eventSlug: "{{ event_slug | escape }}",
+            season: "{{ season | escape }}",
+            phase: "{{ phase | escape }}",
+            division: "{{ division_label | escape }}",
+            gender: "{{ gender | escape }}",
+            sourceUrl: "{{ source_url | escape }}",
+            rows: {{ rows | slice: 0, 32 | jsonify }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  };
+
+  const eventSelect = document.getElementById('eventSelect');
+  const tableContainer = document.getElementById('tableContainer');
+  const tableHeaders = document.getElementById('tableHeaders');
+  const tableBody = document.getElementById('tableBody');
+  const eventTitle = document.getElementById('eventTitle');
+  const eventDetails = document.getElementById('eventDetails');
+  const averageSelect = document.getElementById('averageSelect');
+  const averageBody = document.getElementById('averageBody');
+
+  function parseTimeToSeconds(timeString) {
+    if (!timeString) return NaN;
+
+    const parts = timeString.split(':');
+    if (parts.length === 1) {
+      return parseFloat(parts[0]);
+    }
+
+    if (parts.length === 2) {
+      const minutes = parseFloat(parts[0]);
+      const seconds = parseFloat(parts[1]);
+      if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) return NaN;
+      return minutes * 60 + seconds;
+    }
+
+    return NaN;
+  }
+
+  function formatSecondsToTime(seconds) {
+    if (!Number.isFinite(seconds)) return '';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds - minutes * 60;
+    if (minutes > 0) {
+      return `${minutes}:${remainingSeconds.toFixed(2).padStart(5, '0')}`;
+    }
+    return remainingSeconds.toFixed(2);
+  }
+
+  function renderHeaders() {
+    tableHeaders.innerHTML = '';
+    columns.forEach((col) => {
+      const th = document.createElement('th');
+      th.textContent = col.label;
+      tableHeaders.appendChild(th);
+    });
+  }
+
+  function renderRows(rows) {
+    tableBody.innerHTML = '';
+    rows.forEach((row) => {
+      const tr = document.createElement('tr');
+      columns.forEach((col) => {
+        const td = document.createElement('td');
+        if (col.key === 'auto') {
+          if (row[col.key] && row[col.key].toLowerCase() === 'yes') {
+            td.innerHTML = '<span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:999px;padding:0.2rem 0.6rem;font-weight:600;">AQ</span>';
+          } else {
+            td.textContent = '';
+          }
+        } else {
+          td.textContent = row[col.key] || '';
+        }
+        tr.appendChild(td);
+      });
+      tableBody.appendChild(tr);
+    });
+  }
+
+  function renderEvent(key) {
+    const event = eventData[key];
+    if (!event) return;
+
+    eventTitle.textContent = event.label;
+    eventDetails.innerHTML = `Season: <strong>${event.season}</strong> · Phase: <strong>${event.phase}</strong> · Source: <a href="${event.sourceUrl}" target="_blank" rel="noopener">${event.sourceUrl}</a>`;
+
+    renderRows(event.rows || []);
+    tableContainer.style.display = 'block';
+  }
+
+  function populateSelect() {
+    Object.keys(eventData).sort().forEach((key) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = eventData[key].label;
+      eventSelect.appendChild(option);
+    });
+  }
+
+  const groupedAverages = {};
+
+  function buildGroupedAverages() {
+    Object.values(eventData).forEach((event) => {
+      const groupKey = `${event.eventSlug}|${event.gender}|${event.division}`;
+
+      if (!groupedAverages[groupKey]) {
+        groupedAverages[groupKey] = {
+          label: `${event.eventName} (${event.gender.charAt(0).toUpperCase() + event.gender.slice(1)} ${event.division})`,
+          totals: Array(33).fill(0),
+          counts: Array(33).fill(0),
+        };
+      }
+
+      (event.rows || []).forEach((row) => {
+        const rank = parseInt(row.rk, 10);
+        if (Number.isNaN(rank) || rank < 1 || rank > 32) return;
+
+        const seconds = parseTimeToSeconds(row.ti);
+        if (!Number.isFinite(seconds)) return;
+
+        groupedAverages[groupKey].totals[rank] += seconds;
+        groupedAverages[groupKey].counts[rank] += 1;
+      });
+    });
+  }
+
+  function populateAverageSelect() {
+    Object.entries(groupedAverages)
+      .sort((a, b) => a[1].label.localeCompare(b[1].label))
+      .forEach(([key, info]) => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = info.label;
+        averageSelect.appendChild(option);
+      });
+  }
+
+  function renderAverages(key) {
+    const group = groupedAverages[key];
+    if (!group) return;
+
+    averageBody.innerHTML = '';
+
+    for (let rank = 1; rank <= 32; rank += 1) {
+      const count = group.counts[rank];
+      const total = group.totals[rank];
+      const avg = count ? total / count : NaN;
+
+      const tr = document.createElement('tr');
+
+      const rankTd = document.createElement('td');
+      rankTd.textContent = rank;
+      tr.appendChild(rankTd);
+
+      const avgTd = document.createElement('td');
+      avgTd.textContent = count ? formatSecondsToTime(avg) : '—';
+      tr.appendChild(avgTd);
+
+      const samplesTd = document.createElement('td');
+      samplesTd.textContent = count ? count : '0';
+      tr.appendChild(samplesTd);
+
+      averageBody.appendChild(tr);
+    }
+  }
+
+  averageSelect.addEventListener('change', (event) => {
+    renderAverages(event.target.value);
+  });
+
+  eventSelect.addEventListener('change', (event) => {
+    renderEvent(event.target.value);
+  });
+
+  renderHeaders();
+  populateSelect();
+  buildGroupedAverages();
+  populateAverageSelect();
+  if (eventSelect.options.length) {
+    eventSelect.selectedIndex = 0;
+    renderEvent(eventSelect.value);
+  }
+  if (averageSelect.options.length) {
+    averageSelect.selectedIndex = 0;
+    renderAverages(averageSelect.value);
+  }
+</script>
