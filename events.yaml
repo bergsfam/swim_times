@@ -1,0 +1,663 @@
+state: ohio
+folder: _data
+events:
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 50-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 500-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-backstroke
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-breaststroke
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-butterfly
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-individual-medley
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 400-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-medley-relay
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 50-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 500-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-backstroke
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-breaststroke
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-butterfly
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-individual-medley
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 400-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-medley-relay
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 500-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-backstroke
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-breaststroke
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-butterfly
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-individual-medley
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 400-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-medley-relay
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 50-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 500-freestyle
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-backstroke
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-breaststroke
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-butterfly
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-individual-medley
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 400-freestyle-relay
+  - season: 2024-2025
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-medley-relay
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 50-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 500-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-backstroke
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-breaststroke
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-butterfly
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-individual-medley
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 400-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-medley-relay
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 50-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 500-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-backstroke
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-breaststroke
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-butterfly
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-individual-medley
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 400-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-medley-relay
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 500-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-backstroke
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-breaststroke
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-butterfly
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-individual-medley
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 400-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-medley-relay
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 50-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 500-freestyle
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-backstroke
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-breaststroke
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-butterfly
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-individual-medley
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 400-freestyle-relay
+  - season: 2023-2024
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-medley-relay
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 50-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 500-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-backstroke
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-breaststroke
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 100-butterfly
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-individual-medley
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 400-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d1
+    event_slug: 200-medley-relay
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 50-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 500-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-backstroke
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-breaststroke
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 100-butterfly
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-individual-medley
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 400-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: boys
+    division: d2
+    event_slug: 200-medley-relay
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 500-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-backstroke
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-breaststroke
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 100-butterfly
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-individual-medley
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 400-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d1
+    event_slug: 200-medley-relay
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 50-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 500-freestyle
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-backstroke
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-breaststroke
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 100-butterfly
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-individual-medley
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 400-freestyle-relay
+  - season: 2022-2023
+    phase: finals
+    gender: girls
+    division: d2
+    event_slug: 200-medley-relay
