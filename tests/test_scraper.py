@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock, patch
 
 from swimmeet_scraper.scraper import SwimMeetScraper, SwimMeetScraperError
 

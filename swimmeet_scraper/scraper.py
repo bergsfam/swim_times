@@ -70,7 +70,6 @@ class SwimMeetScraper:
 
     def _parse_payload(self, payload: bytes, content_type: str) -> List[Dict[str, Any]]:
         content_type = content_type.lower() if content_type else ""
-        text = payload.decode("utf-8")
 
         if "xml" in content_type or "<xml" in text.lower() or "<results" in text.lower():
             return self._parse_xml_content(text)
@@ -157,11 +156,18 @@ class SwimMeetScraper:
             return self._parse_payload(payload, content_type)
         except SwimMeetScraperError as exc:
             if not render_js:
-                raise
+                logger.warning("Skipping %s due to parse failure: %s", url, exc)
+                return []
 
             logger.info("Retrying %s with Playwright rendering after parse failure: %s", url, exc)
             rendered_payload = self._fetch_with_playwright(url, timeout=timeout)
-            return self._parse_payload(rendered_payload, "text/html")
+            try:
+                return self._parse_payload(rendered_payload, "text/html")
+            except SwimMeetScraperError as render_exc:
+                logger.warning(
+                    "Skipping %s after render retry due to parse failure: %s", url, render_exc
+                )
+                return []
         except Exception as exc:  # pragma: no cover - safety net
             logger.exception("Failed to parse response from %s", url)
             raise SwimMeetScraperError(f"Failed to parse response from {url}: {exc}") from exc
