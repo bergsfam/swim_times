@@ -72,3 +72,20 @@ Adjust `--base-url` if your swim meet data lives elsewhere (defaults to
 `https://www.swimmeet.com/ohio/2023-2024/compilation/finals/boys-d2-200-medley-relay.html`).
 Use `--timeout` to override the request timeout per call and `--verbose` for
 debug logging.
+
+Automated Excel summaries
+-------------------------
+The helper script at `scripts/generate_event_workbooks.py` loops over every
+`*.csv` in `_data` on GitHub, merges the three seasons for each
+`{gender}-{division}-{event}` by `rk`, and writes an Excel workbook per event
+with `ti`, `mt`, and `auto` columns renamed by season plus an `avg_ti` column.
+
+```bash
+python -m pip install -r requirements.txt
+python scripts/generate_event_workbooks.py --output-dir excel_outputs
+```
+
+Each run pulls the latest CSVs directly from the
+`https://github.com/bergsfam/swim_times` repository, so you do not need a local
+checkout of `_data` to build the summaries. The output directory is created if
+it does not exist.
