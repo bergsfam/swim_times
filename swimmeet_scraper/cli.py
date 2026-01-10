@@ -63,6 +63,17 @@ def _add_event_arguments(subparser: argparse.ArgumentParser) -> None:
     subparser.add_argument("--division", required=True, help="Division identifier (e.g. d1).")
     subparser.add_argument("--event-slug", required=True, help="Event slug (e.g. 50-freestyle).")
     subparser.add_argument("--state", required=True, help="State abbreviation or name.")
+    subparser.add_argument(
+        "--meet-slug",
+        "--state-meet",
+        dest="meet_slug",
+        help="Meet slug for newer URL format (e.g. ohio25).",
+    )
+    subparser.add_argument(
+        "--extension",
+        default="xml",
+        help="File extension for the results endpoint (default: xml).",
+    )
 
 
 def _load_config(path: Path) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
@@ -81,7 +92,11 @@ def _load_config(path: Path) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
 
     defaults: Dict[str, Any] = {}
     if isinstance(loaded, dict):
-        defaults = {key: value for key, value in loaded.items() if key in {"state", "folder"}}
+        defaults = {
+            key: value
+            for key, value in loaded.items()
+            if key in {"state", "state_meet", "meet_slug", "folder", "extension"}
+        }
         if "events" not in loaded:
             raise ValueError("Config mapping must include an 'events' list.")
         events = loaded.get("events", [])
@@ -108,6 +123,8 @@ def _build_output_filename(
 
 def _resolve_event(event: Dict[str, Any], defaults: Dict[str, Any]) -> Dict[str, Any]:
     resolved = {**defaults, **event}
+    if "state_meet" in resolved and "meet_slug" not in resolved:
+        resolved["meet_slug"] = resolved["state_meet"]
     return resolved
 
 
@@ -145,6 +162,8 @@ def handle_fetch(args: argparse.Namespace) -> int:
             event_slug=args.event_slug,
             state=args.state,
             timeout=args.timeout,
+            meet_slug=args.meet_slug,
+            extension=args.extension,
         )
     except SwimMeetScraperError as exc:
         logging.error("Failed to fetch event: %s", exc)
@@ -177,7 +196,9 @@ def handle_fetch_all(args: argparse.Namespace) -> int:
             gender=resolved["gender"],
             division=resolved["division"],
             event_slug=resolved["event_slug"],
-            state=resolved["state"],
+            state=resolved.get("state", ""),
+            meet_slug=resolved.get("meet_slug"),
+            extension=resolved.get("extension", "xml"),
         )
 
         if args.dry_run:
@@ -192,8 +213,10 @@ def handle_fetch_all(args: argparse.Namespace) -> int:
                 gender=resolved["gender"],
                 division=resolved["division"],
                 event_slug=resolved["event_slug"],
-                state=resolved["state"],
+                state=resolved.get("state", ""),
                 timeout=args.timeout,
+                meet_slug=resolved.get("meet_slug"),
+                extension=resolved.get("extension", "xml"),
             )
         except SwimMeetScraperError as exc:
             logging.error("Failed to fetch %s: %s", event.get("event_slug"), exc)
@@ -202,8 +225,11 @@ def handle_fetch_all(args: argparse.Namespace) -> int:
 
 
 def _missing_fields(event: Dict[str, Any]) -> Iterable[str]:
-    required = {"season", "phase", "gender", "division", "event_slug", "state"}
-    return {field for field in required if field not in event}
+    required = {"season", "phase", "gender", "division", "event_slug"}
+    missing = {field for field in required if field not in event}
+    if "state" not in event and "meet_slug" not in event:
+        missing.add("state/meet_slug")
+    return missing
 
 
 def main(argv: list[str] | None = None) -> int:

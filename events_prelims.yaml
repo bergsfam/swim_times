@@ -1,0 +1,796 @@
+state: ohio
+folder: _data
+extension: xml
+events:
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 50-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 500-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-backstroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-breaststroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-butterfly
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-individual-medley
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-medley-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 50-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 500-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-backstroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-breaststroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-butterfly
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-individual-medley
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-medley-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 500-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-backstroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-breaststroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-butterfly
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-individual-medley
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-medley-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 50-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 500-freestyle
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-backstroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-breaststroke
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-butterfly
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-individual-medley
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio25
+  - season: 2024-2025
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-medley-relay
+    meet_slug: ohio25
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 50-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 500-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-backstroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-breaststroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-butterfly
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-individual-medley
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-medley-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 50-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 500-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-backstroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-breaststroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-butterfly
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-individual-medley
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-medley-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 500-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-backstroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-breaststroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-butterfly
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-individual-medley
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-medley-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 50-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 500-freestyle
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-backstroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-breaststroke
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-butterfly
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-individual-medley
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio24
+  - season: 2023-2024
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-medley-relay
+    meet_slug: ohio24
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 50-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 500-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-backstroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-breaststroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 100-butterfly
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-individual-medley
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d1
+    event_slug: 200-medley-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 50-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 500-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-backstroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-breaststroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 100-butterfly
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-individual-medley
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: boys
+    division: d2
+    event_slug: 200-medley-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 50-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 500-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-backstroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-breaststroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 100-butterfly
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-individual-medley
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d1
+    event_slug: 200-medley-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 50-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 500-freestyle
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-backstroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-breaststroke
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 100-butterfly
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-individual-medley
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 400-freestyle-relay
+    meet_slug: ohio23
+  - season: 2022-2023
+    phase: prelims
+    gender: girls
+    division: d2
+    event_slug: 200-medley-relay
+    meet_slug: ohio23

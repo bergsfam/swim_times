@@ -27,15 +27,26 @@ def build_compilation_url(
     state: str,
     *,
     folder: str = "compilation",
+    meet_slug: Optional[str] = None,
+    extension: str = "xml",
 ) -> str:
     """Build a deterministic URL for fetching compiled event data."""
+
+    ext = extension.lstrip(".") or "xml"
+    if meet_slug:
+        safe_parts = [
+            quote(part.strip("/"), safe="-")
+            for part in (meet_slug, phase)
+        ]
+        filename = quote(f"{gender}-{division}-{event_slug}".replace(" ", "-"), safe="-")
+        return "/".join([base_url.rstrip("/")] + safe_parts + [f"{filename}.{ext}"])
 
     safe_parts = [
         quote(part.strip("/"), safe="-")
         for part in (state, season, folder, phase)
     ]
     filename = quote(f"{gender}-{division}-{event_slug}".replace(" ", "-"), safe="-")
-    return "/".join([base_url.rstrip("/")] + safe_parts + [filename + ".xml"])
+    return "/".join([base_url.rstrip("/")] + safe_parts + [f"{filename}.{ext}"])
 
 
 class SwimMeetScraperError(Exception):
@@ -57,6 +68,8 @@ class SwimMeetScraper:
         division: str,
         event_slug: str,
         state: str,
+        meet_slug: Optional[str] = None,
+        extension: str = "xml",
     ) -> str:
         return build_compilation_url(
             self.base_url,
@@ -66,6 +79,8 @@ class SwimMeetScraper:
             division=division,
             event_slug=event_slug,
             state=state,
+            meet_slug=meet_slug,
+            extension=extension,
         )
 
     def _parse_payload(self, payload: bytes, content_type: str) -> List[Dict[str, Any]]:
@@ -146,8 +161,19 @@ class SwimMeetScraper:
         state: str,
         timeout: Optional[float] = None,
         render_js: bool = False,
+        meet_slug: Optional[str] = None,
+        extension: str = "xml",
     ) -> List[Dict[str, Any]]:
-        url = self._build_url(season, phase, gender, division, event_slug, state)
+        url = self._build_url(
+            season,
+            phase,
+            gender,
+            division,
+            event_slug,
+            state,
+            meet_slug=meet_slug,
+            extension=extension,
+        )
         logger.info("Fetching %s", url)
 
         request = Request(
@@ -200,8 +226,20 @@ class SwimMeetScraper:
         event_slug: str,
         state: str,
         timeout: Optional[float] = None,
+        meet_slug: Optional[str] = None,
+        extension: str = "xml",
     ) -> str:
-        rows = self.fetch_event(season, phase, gender, division, event_slug, state, timeout=timeout)
+        rows = self.fetch_event(
+            season,
+            phase,
+            gender,
+            division,
+            event_slug,
+            state,
+            timeout=timeout,
+            meet_slug=meet_slug,
+            extension=extension,
+        )
 
         if not rows:
             logger.warning("No rows returned for %s/%s/%s/%s/%s", state, season, phase, gender, event_slug)
